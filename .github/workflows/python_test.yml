@@ -20,6 +20,10 @@ jobs:
       run: python -m pip install --upgrade pipenv wheel
     - name: Install Dependencies
       run: pipenv install
+    - name: Create .env file
+      run: |
+        touch .env
+        echo "${{ secrets.ENV_FILE }}" > .env
     - name: Test API Bridge 
       run: pipenv run pytest -s
     
