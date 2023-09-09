@@ -23,13 +23,13 @@ jobs:
     - name: Create .env file
       run: |
         touch .env
-        echo "API_VERSION:${{ env.API_VERSION }}" >> .env
-        echo "API_SECRET_KEY:${{ env.API_SECRET_KEY }}" >> .env
-        echo "ALGORITHM:${{ env.ALGORITHM }}" >> .env
-        echo "ACCESS_TOKEN_EXPIRE_MINUTES:${{ env.ACCESS_TOKEN_EXPIRE_MINUTES }}" >> .env
-        echo "REFRESH_TOKEN_KEYWORD:${{ env.REFRESH_TOKEN_KEYWORD }}" >> .env
-        echo "HASH_PASSWORD:${{ env.HASH_PASSWORD }}" >> .env
-        echo "GATEWAY_SECRET_KEY:${{ env.GATEWAY_SECRET_KEY }}" >> .env
+        echo "API_VERSION:${{ secrets.API_VERSION }}" >> .env
+        echo "API_SECRET_KEY:${{ secrets.API_SECRET_KEY }}" >> .env
+        echo "ALGORITHM:${{ secrets.ALGORITHM }}" >> .env
+        echo "ACCESS_TOKEN_EXPIRE_MINUTES:${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}" >> .env
+        echo "REFRESH_TOKEN_KEYWORD:${{ secrets.REFRESH_TOKEN_KEYWORD }}" >> .env
+        echo "HASH_PASSWORD:${{ secrets.HASH_PASSWORD }}" >> .env
+        echo "GATEWAY_SECRET_KEY:${{ secrets.GATEWAY_SECRET_KEY }}" >> .env
         cat .env
     - name: Test API Bridge 
       run: pipenv run pytest -s
