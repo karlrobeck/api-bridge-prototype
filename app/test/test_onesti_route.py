@@ -9,7 +9,6 @@ route = f"/{getenv('API_VERSION')}/onesti"
 
 client = TestClient(app)
 
-
 def test_grades_routes():
     
     #Authorization 
