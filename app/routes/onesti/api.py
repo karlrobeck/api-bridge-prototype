@@ -1,5 +1,5 @@
 from typing import Annotated
-from fastapi import APIRouter,Header
+from fastapi import APIRouter,Header,status
 from ...security.auth import verify_scope,verify_signature
 from ...security.scope import GradeScope
 from .types import StudentGrades
@@ -7,7 +7,7 @@ from os import getenv
 
 router:APIRouter = APIRouter(prefix=f"/{getenv('API_VERSION')}/onesti")    
 
-@router.get('/grades')
+@router.get('/grades',status_code=status.HTTP_200_OK)
 def getGrades(access_token:Annotated[str,Header()]):
 
     scopes:list[GradeScope] = [
@@ -19,7 +19,7 @@ def getGrades(access_token:Annotated[str,Header()]):
 
     return StudentGrades()
 
-@router.post('/grades')
+@router.post('/grades',status_code=status.HTTP_201_CREATED)
 def postGrades(access_token:Annotated[str,Header()]):
 
     scopes:list[GradeScope] = [
@@ -31,7 +31,7 @@ def postGrades(access_token:Annotated[str,Header()]):
 
     return StudentGrades()
 
-@router.put('/grades')
+@router.put('/grades',status_code=status.HTTP_200_OK)
 def putGrades(access_token:Annotated[str,Header()]):
 
     scopes:list[GradeScope] = [
@@ -43,7 +43,7 @@ def putGrades(access_token:Annotated[str,Header()]):
 
     return StudentGrades()
 
-@router.delete('/grades')
+@router.delete('/grades',status_code=status.HTTP_204_NO_CONTENT)
 def deleteGrades(access_token:Annotated[str,Header()]):
 
     scopes:list[GradeScope] = [
@@ -53,4 +53,4 @@ def deleteGrades(access_token:Annotated[str,Header()]):
     verify_signature(access_token)
     verify_scope(access_token,scopes)
 
-    return StudentGrades()
+    return 

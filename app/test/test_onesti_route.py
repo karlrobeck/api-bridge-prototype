@@ -1,6 +1,8 @@
 from ..main import app
+from fastapi import status
 from fastapi.testclient import TestClient
 from ..security.types import ClientInfo,AuthorizeBody,Credentials,AuthorizationData
+from ..routes.onesti.types import StudentGrades
 from os import getenv
 
 route = f"/{getenv('API_VERSION')}/onesti"
@@ -36,20 +38,35 @@ def test_grades_routes():
     assert client.get(
         f'{route}/grades',
         headers={'access-token':authorize_response.access_token}
-    ).status_code == 200
+    ).status_code == status.HTTP_200_OK
+
+    assert list(client.get(
+        f'{route}/grades',
+        headers={'access-token':authorize_response.access_token}
+    ).json().keys()) == list(StudentGrades().model_dump().keys())
     
     assert client.post(
         f'{route}/grades',
         headers={'access-token':authorize_response.access_token}
-    ).status_code == 200
+    ).status_code == status.HTTP_201_CREATED
+
+    assert list(client.post(
+        f'{route}/grades',
+        headers={'access-token':authorize_response.access_token}
+    ).json().keys()) == list(StudentGrades().model_dump().keys())
     
     assert client.put(
         f'{route}/grades',
         headers={'access-token':authorize_response.access_token}
-    ).status_code == 200
+    ).status_code == status.HTTP_200_OK
+
+    assert list(client.put(
+        f'{route}/grades',
+        headers={'access-token':authorize_response.access_token}
+    ).json().keys()) == list(StudentGrades().model_dump().keys())
 
     assert client.delete(
         f'{route}/grades',
         headers={'access-token':authorize_response.access_token}
-    ).status_code == 200
+    ).status_code == status.HTTP_204_NO_CONTENT
     
