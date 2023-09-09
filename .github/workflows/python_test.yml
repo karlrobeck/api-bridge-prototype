@@ -31,8 +31,6 @@ jobs:
           echo "HASH_PASSWORD=${{ secrets.HASH_PASSWORD }}" >> .env
           echo "GATEWAY_SECRET_KEY=${{ secrets.GATEWAY_SECRET_KEY }}" >> .env
           cat .env
-      - name: Checkout
-        uses: actions/checkout@v3
       - name: Test API Bridge 
         run: pipenv run pytest -s
   deployment:
