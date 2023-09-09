@@ -35,7 +35,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: PythonBuild
-        path: /home/runner/work/api-bridge-prototype/api-bridge-prototype/python
+        path: .build/
         if-no-files-found: error
         retention-days: 1
   testing:
@@ -48,7 +48,7 @@ jobs:
       uses: actions/download-artifact@v3
       with: 
         name: PythonBuild
-        path: /home/runner/work/api-bridge-prototype/api-bridge-prototype/python
+        path: .build/
     - name: Test API Bridge 
       run: pipenv run pytest -s
   deployment:
