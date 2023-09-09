@@ -33,11 +33,62 @@ def decode_token(token:str) -> dict | None:
 def generate_refresh_token():
     return 
 
-def decode_client_secret(client_secret:str):
-    return decode_token(client_secret)
-
-def encode_b64(string:str):
+def encode_b64(string:str) -> str:
     return b64encode(string.encode('ascii')).decode('ascii')
 
-def decode_b64(string:str):
+def decode_b64(string:str) -> str:
     return b64decode(string.encode('ascii')).decode('ascii')
+
+def verify_signature(token:str) -> bool | HTTPException:
+
+    try:
+        decoded_token = decode_token(token)
+    except:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Unauthorized Request"
+        )
+    
+    if decoded_token['client_id']['name'] != decoded_token['client_secret']['name']:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Unauthorized Request"
+        )
+    
+    signature = decoded_token['client_secret']['signature']
+
+    if not verify_hash(getenv('HASH_PASSWORD'),signature):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Unauthorized Request"
+        )
+    
+    return True
+
+def verify_scope(token:str,func_scope:list | str | None) -> bool | HTTPException:
+
+    verify_signature(token)
+
+    try:
+        decoded_token = decode_token(token)
+    except:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Unauthorized Request"
+        )
+    
+    scopes:list = decoded_token['client_id']['scope'].split(' ')
+    
+    accepted:int = 0 
+
+    for scope in func_scope:
+        if scope.replace('_','-').lower() in scopes:
+            accepted = accepted + 1
+
+    if accepted != len(func_scope):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Unauthorized Request"
+        )
+    
+    return True

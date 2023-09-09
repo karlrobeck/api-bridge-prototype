@@ -92,7 +92,6 @@ async def authorizeToken(req:AuthorizeBody,client_credentials:Annotated[str | No
 @router.post('/register')
 async def register(request:ClientId,gateway_password:Annotated[str,Header()]):
 
-
     if getenv('GATEWAY_SECRET_KEY') != gateway_password:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
