@@ -21,11 +21,9 @@ jobs:
     - name: Install Dependencies
       run: pipenv install
     - name: Create .env file
-      env:
-        ENV_FILE: ${{ env.ENV_FILE }}
       run: |
         touch .env
-        echo $ENV_FILE > .env
+        echo ${{ env.ENV_FILE }} > .env
     - name: Test API Bridge 
       run: pipenv run pytest -s
     
