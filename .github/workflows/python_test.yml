@@ -25,7 +25,7 @@ jobs:
         ENV_FILE: ${{ secrets.ENV_FILE }}
       run: |
         touch .env
-        echo "$ENV_FILE" > .env
+        echo $ENV_FILE > .env
     - name: Test API Bridge 
       run: pipenv run pytest -s
     
