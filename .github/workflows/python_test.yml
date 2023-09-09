@@ -23,8 +23,7 @@ jobs:
     - name: Create .env file
       run: |
         touch .env
-        echo ${{ env.ACCESS_TOKEN_EXPIRE_MINUTES }} >> .env
-        echo ${{ test }} >> .env
+        echo "ACCESS_TOKEN_EXPIRE_MINUTES:${{ env.ACCESS_TOKEN_EXPIRE_MINUTES }}" >> .env
         cat .env
     - name: Test API Bridge 
       run: pipenv run pytest -s
