@@ -35,7 +35,6 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: PythonBuild
-        path: .venv
         retention-days: 1
   testing:
     runs-on: ubuntu-latest
@@ -47,7 +46,6 @@ jobs:
       uses: actions/download-artifact@v3
       with: 
         name: PythonBuild
-        path: .venv
     - name: Test API Bridge 
       run: pipenv run pytest -s
   deployment:
