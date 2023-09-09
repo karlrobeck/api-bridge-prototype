@@ -2,28 +2,27 @@ from ..main import app
 from fastapi.testclient import TestClient
 from os import getenv
 from ..security import auth
-
+from ..security.types import Credentials,ClientInfo,AuthorizeBody,AuthorizationData
 route = f"/{getenv('API_VERSION')}/security"
 
 client = TestClient(app)
-
-API_TOKEN = {}
 
 def test_route():
 
     #REGISTER ROUTE
     register_response = client.post(
         f'{route}/register',
-        headers={"gateway-password":getenv('GATEWAY_SECRET_KEY')},json={
-        "name": "string",
-        "app_type": "string",
-        "role": "string",
-        "scope": "string"
-        }
+        headers={"gateway-password":getenv('GATEWAY_SECRET_KEY')},
+        json=ClientInfo(
+            name="Test Client",
+            app_type="basic",
+            role="basic",
+            scope="user-read-grades user-update-grades user-create-grades user-delete-grades"
+        ).model_dump()
     )
 
     assert register_response.status_code == 200
-    assert list(register_response.json().keys()) == ['client_id','client_secret','client_credentials']
+    assert list(register_response.json().keys()) == list(Credentials().model_dump().keys())
 
     print('\nREGISTER ROUTE: PASSED')
 
@@ -32,14 +31,13 @@ def test_route():
         f'{route}/authorize',
         headers={'client-credentials':register_response.json()['client_credentials']},
         json={
-            "client_credentials": register_response.json()['client_credentials'],
             "response_type": "json",
             "state": "string",
             "scope": "string"
         }
     )
     assert authorize_response.status_code == 200,'test'
-    assert list(authorize_response.json().keys()) == ['access_token','refresh_token','scope','token_type']
+    assert list(authorize_response.json().keys()) == list(AuthorizationData().model_dump().keys())
 
     print('AUTHORIZE ROUTE: PASSED')
 

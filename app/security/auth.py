@@ -5,7 +5,6 @@ from passlib.context import CryptContext
 from jose import jwt, JWTError
 from datetime import timedelta, datetime
 from os import getenv
-from .types import ClientId,ClientSecret
 from base64 import b64decode,b64encode
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

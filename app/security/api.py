@@ -2,12 +2,12 @@ from typing import Annotated
 from fastapi import APIRouter,status, Header,HTTPException
 from os import getenv
 from .auth import create_token,decode_token,encode_b64,decode_b64,verify_hash,get_hash
-from .types import AuthorizeBody,ClientId,ClientSecret
+from .types import AuthorizeBody,ClientInfo,ClientSecret,Credentials,AuthorizationData
 
 router:APIRouter = APIRouter(prefix=f"/{getenv('API_VERSION')}/security")    
 
 @router.post('/authorize')
-async def authorizeToken(req:AuthorizeBody,client_credentials:Annotated[str | None,Header()]):
+async def authorizeToken(req:AuthorizeBody,client_credentials:Annotated[str,Header()]):
     """
         required: 
         Header:
@@ -73,24 +73,24 @@ async def authorizeToken(req:AuthorizeBody,client_credentials:Annotated[str | No
         )
 
     #return new access token
-    return {
-        "access_token":create_token({
+    return AuthorizationData(
+        access_token=create_token({
             "client_id":decoded_client_id,
             "client_secret":decoded_client_secret,
             "scope":req.scope
         },expires_delta=True),
-        "refresh_token":create_token({
+        refresh_token=create_token({
             "client_id":decoded_client_id,
             "client_secret":decoded_client_secret,
             "scope":req.scope,
             "refresh_hash":get_hash(getenv('REFRESH_TOKEN_KEYWORD'))
         }),
-        "scope":req.scope,
-        "token_type":"bearer",
-    }
+        scope=req.scope,
+        token_type="bearer"
+    )
 
 @router.post('/register')
-async def register(request:ClientId,gateway_password:Annotated[str,Header()]):
+async def register(request:ClientInfo,gateway_password:Annotated[str,Header()]):
 
     if getenv('GATEWAY_SECRET_KEY') != gateway_password:
         raise HTTPException(
@@ -104,10 +104,11 @@ async def register(request:ClientId,gateway_password:Annotated[str,Header()]):
         signature=get_hash(getenv('HASH_PASSWORD'))
     ).model_dump())
 
-    return {
-        "client_id":client_id,
-        "client_secret":client_secret,
-        "client_credentials":encode_b64(f'Authorization {client_id}:{client_secret}'),
-    }
+    return Credentials(
+        client_id=client_id,
+        client_secret=client_secret,
+        client_credentials=encode_b64(f'Authorization {client_id}:{client_secret}'),
+        scopes=request.scope
+    )
     
 
