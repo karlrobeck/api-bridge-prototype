@@ -7,6 +7,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./build
     environment: API_BRIDGE
     steps:
     - uses: actions/checkout@v3
@@ -35,7 +38,8 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: PythonBuild
-        path: /usr/bin/python_build
+        path: /build/python
+        if-no-files-found: error
         retention-days: 1
   testing:
     runs-on: ubuntu-latest
@@ -47,7 +51,7 @@ jobs:
       uses: actions/download-artifact@v3
       with: 
         name: PythonBuild
-        path: /usr/bin/python_build
+        path: /build/python
     - name: Test API Bridge 
       run: pipenv run pytest -s
   deployment:
