@@ -35,16 +35,19 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: PythonBuild
-        path: ./out
+        path: path/to/artifacts
+        retention-days: 1
   testing:
     runs-on: ubuntu-latest
     needs: build
     steps:
+    - name: Checkout
+      uses: actions/checkout@v3
     - name: Download the API build 
       uses: actions/download-artifact@v3
       with: 
         name: PythonBuild
-        path: ./out
+        path: path/to/artifacts
     - name: Test API Bridge 
       run: pipenv run pytest -s
   deployment:
