@@ -33,11 +33,6 @@ jobs:
           cat .env
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Download the API build 
-        uses: actions/download-artifact@v3
-        with: 
-          name: PythonBuild
-          path: /home/runner/work/_temp/artifact.tar
       - name: Test API Bridge 
         run: pipenv run pytest -s
   deployment:
