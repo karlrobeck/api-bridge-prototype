@@ -11,7 +11,7 @@ from base64 import b64decode,b64encode
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"/{getenv('API_VERSION')}/security/token")
 
-def verify_hash(plain_str, hashed_str):
+def verify_hash(plain_str, hashed_str) -> bool:
     return pwd_context.verify(plain_str, hashed_str)
 
 def get_hash(string:str) -> str:
