@@ -31,12 +31,12 @@ jobs:
         echo "HASH_PASSWORD=${{ secrets.HASH_PASSWORD }}" >> .env
         echo "GATEWAY_SECRET_KEY=${{ secrets.GATEWAY_SECRET_KEY }}" >> .env
         cat .env
-    - name: Upload Build Artifact
+    - name: Build Tar file
       env:
         INPUT_PATH: ./out
       run: |
         tar --dereference --hard-dereference --directory "$INPUT_PATH" -cvf "$RUNNER_TEMP/artifact.tar" --exclude=.git --exclude=.git .
-      
+    - name: Upload Build Artifact
       uses: actions/upload-artifact@v3
       with:
         name: PythonBuild
