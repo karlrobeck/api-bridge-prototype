@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  environment-setup:
+  build:
     runs-on: ubuntu-latest
     environment: API_BRIDGE
     steps:
@@ -32,9 +32,15 @@ jobs:
         echo "GATEWAY_SECRET_KEY=${{ secrets.GATEWAY_SECRET_KEY }}" >> .env
         cat .env
   testing:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
     - name: Test API Bridge 
       run: pipenv run pytest -s
   deployment:
+    runs-on: ubuntu-latest
+    needs: testing
+    steps:
     - name: deploying to cloud provider
       run: echo "For now, no cloud provider will be tested"
     
