@@ -64,7 +64,7 @@ The api-bridge-prototype supports the following scopes:
 ### the registration url is only responsible for registering the client app. only the authorization server is only allowed to connect to this route
 
 The api-bridge-prototype uses the OAuth 2.0 protocol for registration and authorization. To register your client application, you need to send a POST request to the /register endpoint. The request body should contain the following information:
-```json
+```javascript
 {
     name: "Your app name",
     app_type: "Your app type",
@@ -78,7 +78,7 @@ The api-bridge-prototype uses the OAuth 2.0 protocol for registration and author
 - `scope`: scopes that the apps need in the api and database.
 
 after the request is completed the response body will contain
-```json
+```javascript
 {
     client_id: "Your client ID",
     client_secret: "Your client secret",
@@ -91,7 +91,7 @@ after the request is completed the response body will contain
 
 Once your client application has been registered, you can request an access token by sending a POST request to the `/authorize` endpoint. The request body should contain the following information:
 
-```json
+```javascript
 {
     access_token: "The access token that you can use to communicate with the resource server."
     refresh_token: "The refresh token that you can use to refresh the main token."
