@@ -7,7 +7,10 @@ Bridge for connecting database and client using jwt security
 2. How to To use the api-bridge-prototype
 3. File structure
 4. Scopes
-4. Registration and Authorization Flow
+    - Course Scopes
+    - Student Scopes
+5. Registration and Authorization Flow
+6. Example of connecting to the API
 
 # Purpose of the system
 
@@ -267,5 +270,6 @@ console.log("Access token:", access_token);
 print(f"Client ID: {client_id}")
 print(f"Access token: {access_token}")
 ```
+
 # Routes
 
