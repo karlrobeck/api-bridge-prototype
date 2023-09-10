@@ -119,21 +119,27 @@ The response body contain the following after being successful
 
 # Example of connecting to the API
 
-1. Create two constants, `registrationUrl` and `authorizationUrl`, to store the URLs of the registration and authorization routes.
+1. Create two constants, `registrationUrl` and `authorizationUrl`, to store the URLs of the registration and authorization routes and variable for storing data.
 
 **javascript**
 ```javascript 
 const registrationUrl = "https://api.example.com/v1/security/register";
 const authorizationUrl = "https://api.example.com/v1/security/authorization";
+let client_id = undefined;
+let access_token = undefined;
 ```
+**python**
 ```python
 registrationUrl = "https://api.example.com/v1/security/register"
 authorizationUrl = "https://api.example.com/v1/security/authorization"
+client_id = None
+access_token = None
 ```
 ### IMPORTANT NOTICE
 ### the registration url is only responsible for registering the client app. only the authorization server is only allowed to connect to this route
 2. Create a `POST` request to the `registrationUrl` with the following headers:
 - **gateway-password: your-gateway-password**
+**javascript**
 ```javascript
 const response = await fetch(registrationUrl, {
     method: "POST",
@@ -148,6 +154,7 @@ const response = await fetch(registrationUrl, {
     }),
 });
 ```
+**python**
 ```python
 response = requests.post(registrationUrl, 
     headers={"gateway-password": "your-gateway-password"}, 
@@ -158,17 +165,19 @@ response = requests.post(registrationUrl,
     "scope": "The scopes your app needs to access",
 })
 ```
+**javascript**
 ```javascript
 if (response.ok) {
     const data = await response.json();
-    return data;
+    client_id = data
 } else {
     throw new Error(response.statusText);
 }
 ```
+**python**
 ```python
 if response.status_code == 200:
-    return response.json()
+    client_id response.json()
 else:
     raise Exception(response.reason)
 ```
@@ -180,6 +189,7 @@ headers:
 ```javascript 
 "client-credentials": "your-client-credentials"
 ```
+**javascript**
 ```javascript
 const authorize = async () => {
   const response = await fetch(authorizationUrl, {
@@ -194,6 +204,7 @@ const authorize = async () => {
     }),
 });
 ```
+**python**
 ```python
 response = requests.post(authorizationUrl, 
     headers={"client-credentials": "your-client-credentials"}, 
@@ -204,30 +215,34 @@ response = requests.post(authorizationUrl,
 })
 ```
 The `client-credentials` header is used to authenticate the request. The `client_id` and `client_secret` properties are used to authorize the app. The `scope` property is used to specify the scopes that the app needs to access.
+**javascript**
 ```javascript
 if (response.ok) {
     const data = await response.json();
-    return data;
+    access_token = data;
 } else {
     throw new Error(response.statusText);
 }
 };
 ```
+**python**
 ```python
 if response.status_code == 200:
-    return response.json()
+    access_token = response.json()
 else:
     raise Exception(response.reason)
 ```
 you can now access the gathered data 
+
+**javascript**
 ```javascript
-console.log("Client ID:", clientId);
-console.log("Access token:", accessToken);
+console.log("Client ID:", client_id);
+console.log("Access token:", access_token);
 ```
-
-# security
-
-# test
-
-# routes
+**python**
+```python
+print(f"Client ID: {client_id}")
+print(f"Access token: {access_token}")
+```
+# Routes
 
