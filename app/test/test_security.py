@@ -21,7 +21,7 @@ def test_route():
         ).model_dump()
     )
 
-    assert register_response.status_code == 200
+    assert register_response.status_code == 201
     assert list(register_response.json().keys()) == list(Credentials().model_dump().keys())
 
     print('\nREGISTER ROUTE: PASSED')
@@ -36,7 +36,7 @@ def test_route():
             "scope": "string"
         }
     )
-    assert authorize_response.status_code == 200,'test'
+    assert authorize_response.status_code == 200
     assert list(authorize_response.json().keys()) == list(AuthorizationData().model_dump().keys())
 
     print('AUTHORIZE ROUTE: PASSED')

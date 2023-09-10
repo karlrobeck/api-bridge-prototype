@@ -6,8 +6,8 @@ from .types import AuthorizeBody,ClientInfo,ClientSecret,Credentials,Authorizati
 
 router:APIRouter = APIRouter(prefix=f"/{getenv('API_VERSION')}/security")    
 
-@router.post('/authorize')
-async def authorizeToken(req:AuthorizeBody,client_credentials:str=Header()) -> AuthorizationData | HTTPException:
+@router.post('/authorize',status_code=status.HTTP_200_OK)
+async def authorizeToken(req:AuthorizeBody,client_credentials:str=Header()):
     """
     Authorizes a client with the given client credentials.
 
@@ -90,8 +90,8 @@ async def authorizeToken(req:AuthorizeBody,client_credentials:str=Header()) -> A
         token_type="bearer"
     )
 
-@router.post('/register')
-async def register(request:ClientInfo,gateway_password:Annotated[str,Header()]) -> Credentials | HTTPException:
+@router.post('/register',status_code=status.HTTP_201_CREATED)
+async def register(request:ClientInfo,gateway_password:Annotated[str,Header()]):
     """
     Registers a new client.
 
