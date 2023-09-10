@@ -11,12 +11,47 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"/{getenv('API_VERSION')}/security/token")
 
 def verify_hash(plain_str, hashed_str) -> bool:
+    
+    """
+    Verify a hashed string against a plain string.
+
+    Args:
+        plain_str: The plain string.
+        hashed_str: The hashed string.
+
+    Returns:
+        True if the hashes match, False otherwise.
+    """
+
     return pwd_context.verify(plain_str, hashed_str)
 
-def get_hash(string:str) -> str:
-    return pwd_context.hash(string)
+def get_hash(plain_str:str) -> str:
+
+    """
+    Get the hash of a string.
+
+    Args:
+        string: The string to hash.
+
+    Returns:
+        The hash of the string.
+    """
+
+    return pwd_context.hash(plain_str)
 
 def create_token(data: dict, expires_delta:bool=False) -> str:
+    
+    """
+    Create a JSON Web Token (JWT).
+
+    Args:
+        data: The data to be encoded in the token.
+        expires_delta: Whether or not the token should expire.
+
+    Returns:
+        The JWT.
+    """
+
     to_encode = data.copy()
 
     if expires_delta:
@@ -27,18 +62,64 @@ def create_token(data: dict, expires_delta:bool=False) -> str:
     return encoded_jwt
 
 def decode_token(token:str) -> dict | None:
+    
+    """
+    Decode a JSON Web Token (JWT).
+
+    Args:
+        token: The JWT to be decoded.
+
+    Returns:
+        The decoded JWT data, or None if the token is invalid.
+    """
+    
     return jwt.decode(token, getenv('API_SECRET_KEY'), algorithms=getenv('ALGORITHM'))
 
 def generate_refresh_token():
     return 
 
 def encode_b64(string:str) -> str:
+    
+    """
+    Encode a string to base64.
+
+    Args:
+        string: The string to encode.
+
+    Returns:
+        The base64-encoded string.
+    """
+    
     return b64encode(string.encode('ascii')).decode('ascii')
 
 def decode_b64(string:str) -> str:
+    
+    """
+    Decode a base64-encoded string.
+
+    Args:
+        string: The base64-encoded string.
+
+    Returns:
+        The decoded string.
+    """
+    
     return b64decode(string.encode('ascii')).decode('ascii')
 
 def verify_signature(token:str) -> bool | HTTPException:
+
+    """
+    Verify the signature of a JSON Web Token (JWT).
+
+    Args:
+        token: The JWT to be verified.
+
+    Returns:
+        True if the signature is valid, False otherwise.
+
+    Raises:
+        HTTPException: If the token is invalid.
+    """
 
     try:
         decoded_token = decode_token(token)
@@ -65,6 +146,21 @@ def verify_signature(token:str) -> bool | HTTPException:
     return True
 
 def verify_scope(token:str,func_scope:list | str | None) -> bool | HTTPException:
+
+    """
+    Verify the scope of a JWT token.
+
+    Args:
+        token: The JWT to be verified.
+        scope: scope of the token. can be a list, string, or None
+
+    Returns:
+        True if the scope is valid, False otherwise.
+        
+    Raises:
+        HTTPException: If the scope is invalid.
+
+    """
 
     verify_signature(token)
 

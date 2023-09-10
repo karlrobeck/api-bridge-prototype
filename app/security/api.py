@@ -7,19 +7,19 @@ from .types import AuthorizeBody,ClientInfo,ClientSecret,Credentials,Authorizati
 router:APIRouter = APIRouter(prefix=f"/{getenv('API_VERSION')}/security")    
 
 @router.post('/authorize')
-async def authorizeToken(req:AuthorizeBody,client_credentials:Annotated[str,Header()]):
+async def authorizeToken(req:AuthorizeBody,client_credentials:str=Header()) -> AuthorizationData | HTTPException:
     """
-        required: 
-        Header:
-            client_credentials: base64 encode string of client_id and client_secret
-        Body:
-            response_type: json
-            state: provides protection against attacks such as cross-site request forgery.
-            scope: space seperated list of scopes
-        return {
-            access_token:
-            token_type:
-        }
+    Authorizes a client with the given client credentials.
+
+    Args:
+        req: The request body.
+        client_credentials: The client credentials header.
+
+    Returns:
+        The authorization data.
+
+    Raises:
+        HTTPException: If the request is invalid.
     """
 
     if req.response_type != 'json':
@@ -28,7 +28,7 @@ async def authorizeToken(req:AuthorizeBody,client_credentials:Annotated[str,Head
             detail="response_type must be equal to json"
         )
 
-    #decode the client header
+    # Decode the client header.
     try:
         decoded_header = decode_b64(client_credentials)
     except:
@@ -43,36 +43,37 @@ async def authorizeToken(req:AuthorizeBody,client_credentials:Annotated[str,Head
             detail="Invalid client credentials format"
         )
 
-    #check if client credentials is in right format
+    # Check if the client credentials are in the correct format.
     if decoded_header.split(' ')[0] != 'Authorization':
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid client credential format"
         )
 
-    #get the client header 
+    # Get the client header.
     client_header = decoded_header.split(' ')[1].split(':')
 
-    #decode client_id
+    # Decode the client_id.
     decoded_client_id = decode_token(client_header[0])
-    #decode client_secret
+    
+    # Decode the client_id.
     decoded_client_secret = decode_token(client_header[1])
 
-    #check if client id and client secret belongs to each other
+    # Check if the client_id and client_secret belong to each other.
     if decoded_client_id['name'] != decoded_client_secret['name']:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="client id and client secret not match"
         )
     
-    #verify if client secret is signed by the system
+    # Verify if the client secret is signed by the system.
     if not verify_hash(getenv('HASH_PASSWORD'),decoded_client_secret['signature']):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Unautorized Request"
         )
 
-    #return new access token
+    # Return a new access token.
     return AuthorizationData(
         access_token=create_token({
             "client_id":decoded_client_id,
@@ -90,7 +91,20 @@ async def authorizeToken(req:AuthorizeBody,client_credentials:Annotated[str,Head
     )
 
 @router.post('/register')
-async def register(request:ClientInfo,gateway_password:Annotated[str,Header()]):
+async def register(request:ClientInfo,gateway_password:Annotated[str,Header()]) -> Credentials | HTTPException:
+    """
+    Registers a new client.
+
+    Args:
+        request: The client information.
+        gateway_password: The gateway password.
+
+    Returns:
+        The credentials for the new client.
+
+    Raises:
+        HTTPException: If the request is invalid or the gateway password is incorrect.
+    """
 
     if getenv('GATEWAY_SECRET_KEY') != gateway_password:
         raise HTTPException(
@@ -98,12 +112,14 @@ async def register(request:ClientInfo,gateway_password:Annotated[str,Header()]):
             detail="Unautorized Request"
         )
     
+    # Create a client ID and client secret.
     client_id = create_token(request.model_dump())
     client_secret = create_token(ClientSecret(
         name=request.name,
         signature=get_hash(getenv('HASH_PASSWORD'))
     ).model_dump())
 
+    # Return the credentials for the new client.
     return Credentials(
         client_id=client_id,
         client_secret=client_secret,
