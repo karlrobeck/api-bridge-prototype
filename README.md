@@ -20,15 +20,15 @@ The api-bridge-prototype is a middleware that connects a client application to a
 you first need to register your client application. This will give you a client ID and client secret that you will need to use to authorize requests. Once you have registered your client application, you can make CRUD requests to the database server through the API.
 
 # File structure
-    app/
-    ├───routes/
-    │   ├───course/
-    │   ├───onesti/
-    │   ├───payment/
-    │   ├───staff/
-    │   └───student/
-    ├───security/
-    └───test/
+    app
+    │   ├───routes
+    │   │   ├───course
+    │   │   ├───payment
+    │   │   ├───staff
+    │   │   └───student
+    │   ├───security
+    │   ├───test
+
 The `routes` directory contains the API endpoints. The `security` directory contains the code for JWT security. The `test` directory contains the unit tests for the API.
 
 # Scopes
