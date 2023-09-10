@@ -1,11 +1,9 @@
-from typing import Annotated
-from fastapi import APIRouter,status,Header
+from fastapi import APIRouter,status
 
 activity_router:APIRouter = APIRouter()
 
 @activity_router.get('/activity',status_code=status.HTTP_200_OK)
 def getActivity():
-
     return 
 
 @activity_router.post('/activity',status_code=status.HTTP_201_CREATED)

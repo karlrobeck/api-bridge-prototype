@@ -146,8 +146,6 @@ def verify_signature(token:str) -> bool | HTTPException:
     return True
 
 def verify_request(request:Request):
-    print(request.method.lower())
-    print(request.url.path)
 
     #verify token signature
     verify_signature(request.headers.get('access-token'))

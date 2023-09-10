@@ -30,26 +30,9 @@ The `routes` directory contains the API endpoints. The `security` directory cont
 
 # Scopes
 The api-bridge-prototype supports the following scopes:
-## Student Scopes
-| Scopes | Description |
-|---|---|
-| `user-post-student-balance` | Allows the user to create a new student balance. |
-| `user-get-student-balance` | Allows the user to get a student balance. |
-| `user-delete-student-balance` | Allows the user to delete a student balance. |
-| `user-put-student-balance` | Allows the user to update a student balance. |
-| `user-post-student-grades` | Allows the user to create new student grades. |
-| `user-get-student-grades` | Allows the user to get student grades. |
-| `user-delete-student-grades` | Allows the user to delete student grades. |
-| `user-put-student-grades` | Allows the user to update student grades. |
-| `user-post-student-info` | Allows the user to create new student information. |
-| `user-get-student-info` | Allows the user to get student information. |
-| `user-delete-student-info` | Allows the user to delete student information. |
-| `user-put-student-info` | Allows the user to update student information. |
-| `user-post-student-schedule` | Allows the user to create a new student schedule. |
-| `user-get-student-schedule` | Allows the user to get a student schedule. |
-| `user-delete-student-schedule` | Allows the user to delete a student schedule. |
-| `user-put-student-schedule` | Allows the user to update a student schedule. |
-## Course Scopes
+
+# Course Scopes
+
 | Scopes | Description |
 |---|---|
 | `user-post-course-activity` | Allows the user to create a new course activity. |
@@ -64,18 +47,39 @@ The api-bridge-prototype supports the following scopes:
 | `user-get-course-info` | Allows the user to get a course information. |
 | `user-delete-course-info` | Allows the user to delete a course information. |
 | `user-put-course-info` | Allows the user to update a course information. |
-| `user-post-course-lessons` | Allows the user to create a new course lessons. |
-| `user-get-course-lessons` | Allows the user to get a course lessons. |
-| `user-delete-course-lessons` | Allows the user to delete a course lessons. |
-| `user-put-course-lessons` | Allows the user to update a course lessons. |
+| `user-post-course-lesson` | Allows the user to create a new course lessons. |
+| `user-get-course-lesson` | Allows the user to get a course lessons. |
+| `user-delete-course-lesson` | Allows the user to delete a course lessons. |
+| `user-put-course-lesson` | Allows the user to update a course lessons. |
 | `user-post-course-quiz` | Allows the user to create a new course quiz. |
 | `user-get-course-quiz` | Allows the user to get a course quiz. |
 | `user-delete-course-quiz` | Allows the user to delete a course quiz. |
 | `user-put-course-quiz` | Allows the user to update a course quiz. |
-| `user-post-course-task_performance` | Allows the user to create a new course task performance. |
-| `user-get-course-task_performance` | Allows the user to get a course task performance. |
-| `user-delete-course-task_performance` | Allows the user to delete a course task performance. |
-| `user-put-course-task_performance` | Allows the user to update a course task performance. |
+| `user-post-course-task-performance` | Allows the user to create a new course task performance. |
+| `user-get-course-task-performance` | Allows the user to get a course task performance. |
+| `user-delete-course-task-performance` | Allows the user to delete a course task performance. |
+| `user-put-course-task-performance` | Allows the user to update a course task performance. |
+
+# Student Scopes
+
+| Scopes | Description |
+|---|---|
+| `user-post-student-balance` | Allows the user to create a new student balance. |
+| `user-get-student-balance` | Allows the user to get a student balance. |
+| `user-delete-student-balance` | Allows the user to delete a student balance. |
+| `user-put-student-balance` | Allows the user to update a student balance. |
+| `user-post-student-grades` | Allows the user to create a new student grades. |
+| `user-get-student-grades` | Allows the user to get a student grades. |
+| `user-delete-student-grades` | Allows the user to delete a student grades. |
+| `user-put-student-grades` | Allows the user to update a student grades. |
+| `user-post-student-info` | Allows the user to create a new student information. |
+| `user-get-student-info` | Allows the user to get a student information. |
+| `user-delete-student-info` | Allows the user to delete a student information. |
+| `user-put-student-info` | Allows the user to update a student information. |
+| `user-post-student-schedule` | Allows the user to create a new student schedule. |
+| `user-get-student-schedule` | Allows the user to get a student schedule. |
+| `user-delete-student-schedule` | Allows the user to delete a student schedule. |
+| `user-put-student-schedule` | Allows the user to update a student schedule. |
 
 # Registration and Authorization Flow
 
