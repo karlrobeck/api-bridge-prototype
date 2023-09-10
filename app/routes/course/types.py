@@ -29,3 +29,8 @@ class CourseLesson(BaseModel):
             Activity(),
         ]
     ]
+
+class CourseInfo(BaseModel):
+    name:str
+    description:str
+    

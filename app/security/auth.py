@@ -1,5 +1,5 @@
 from typing import Annotated
-from fastapi import Depends, HTTPException, status
+from fastapi import HTTPException, status,Header,Request
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 from jose import jwt, JWTError
@@ -145,45 +145,20 @@ def verify_signature(token:str) -> bool | HTTPException:
     
     return True
 
-def verify_scope(token:str,func_scope:list | str | None) -> bool | HTTPException:
+def verify_request(request:Request):
+    print(request.method.lower())
+    print(request.url.path)
 
-    """
-    Verify the scope of a JWT token.
+    #verify token signature
+    verify_signature(request.headers.get('access-token'))
 
-    Args:
-        token: The JWT to be verified.
-        scope: scope of the token. can be a list, string, or None
-
-    Returns:
-        True if the scope is valid, False otherwise.
-        
-    Raises:
-        HTTPException: If the scope is invalid.
-
-    """
-
-    verify_signature(token)
-
-    try:
-        decoded_token = decode_token(token)
-    except:
+    #verify user scope
+    decoded_token = decode_token(request.headers.get('access-token'))
+    user_scopes = decoded_token['scope']
+    scope_permission = f'user-{request.method.lower()}-{str(request.url.path.split("/")[-2]).lower()}-{str(request.url.path.split("/")[-1]).lower()}'
+    
+    if scope_permission not in user_scopes.split(' '):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Unauthorized Request"
         )
-    
-    scopes:list = decoded_token['client_id']['scope'].split(' ')
-    
-    accepted:int = 0 
-
-    for scope in func_scope:
-        if scope.replace('_','-').lower() in scopes:
-            accepted = accepted + 1
-
-    if accepted != len(func_scope):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Unauthorized Request"
-        )
-    
-    return True

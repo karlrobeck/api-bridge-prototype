@@ -30,33 +30,52 @@ The `routes` directory contains the API endpoints. The `security` directory cont
 
 # Scopes
 The api-bridge-prototype supports the following scopes:
-#
-| Scope | Description |
+## Student Scopes
+| Scopes | Description |
 |---|---|
-| `user-read-grades` | Allows the user to read grades. |
-| `user-update-grades` | Allows the user to update grades. |
-| `user-create-grades` | Allows the user to create grades. |
-| `user-delete-grades` | Allows the user to delete grades. |
-| `user-read-schedule` | Allows the user to read schedules. |
-| `user-update-schedule` | Allows the user to update schedules. |
-| `user-create-schedule` | Allows the user to create schedules. |
-| `user-delete-schedule` | Allows the user to delete schedules. |
-| `user-read-curriculum` | Allows the user to read curriculums. |
-| `user-update-curriculum` | Allows the user to update curriculums. |
-| `user-create-curriculum` | Allows the user to create curriculums. |
-| `user-delete-curriculum` | Allows the user to delete curriculums. |
-| `user-read-classroom` | Allows the user to read classrooms. |
-| `user-update-classroom` | Allows the user to update classrooms. |
-| `user-create-classroom` | Allows the user to create classrooms. |
-| `user-delete-classroom` | Allows the user to delete classrooms. |
-| `user-read-news` | Allows the user to read news. |
-| `user-update-news` | Allows the user to update news. |
-| `user-create-news` | Allows the user to create news. |
-| `user-delete-news` | Allows the user to delete news. |
-| `user-read-student-section` | Allows the user to read student sections. |
-| `user-update-student-section` | Allows the user to update student sections. |
-| `user-create-student-section` | Allows the user to create student sections. |
-| `user-delete-student-section` | Allows the user to delete student sections. |
+| `user-post-student-balance` | Allows the user to create a new student balance. |
+| `user-get-student-balance` | Allows the user to get a student balance. |
+| `user-delete-student-balance` | Allows the user to delete a student balance. |
+| `user-put-student-balance` | Allows the user to update a student balance. |
+| `user-post-student-grades` | Allows the user to create new student grades. |
+| `user-get-student-grades` | Allows the user to get student grades. |
+| `user-delete-student-grades` | Allows the user to delete student grades. |
+| `user-put-student-grades` | Allows the user to update student grades. |
+| `user-post-student-info` | Allows the user to create new student information. |
+| `user-get-student-info` | Allows the user to get student information. |
+| `user-delete-student-info` | Allows the user to delete student information. |
+| `user-put-student-info` | Allows the user to update student information. |
+| `user-post-student-schedule` | Allows the user to create a new student schedule. |
+| `user-get-student-schedule` | Allows the user to get a student schedule. |
+| `user-delete-student-schedule` | Allows the user to delete a student schedule. |
+| `user-put-student-schedule` | Allows the user to update a student schedule. |
+## Course Scopes
+| Scopes | Description |
+|---|---|
+| `user-post-course-activity` | Allows the user to create a new course activity. |
+| `user-get-course-activity` | Allows the user to get a course activity. |
+| `user-delete-course-activity` | Allows the user to delete a course activity. |
+| `user-put-course-activity` | Allows the user to update a course activity. |
+| `user-post-course-assignment` | Allows the user to create a new course assignment. |
+| `user-get-course-assignment` | Allows the user to get a course assignment. |
+| `user-delete-course-assignment` | Allows the user to delete a course assignment. |
+| `user-put-course-assignment` | Allows the user to update a course assignment. |
+| `user-post-course-info` | Allows the user to create a new course information. |
+| `user-get-course-info` | Allows the user to get a course information. |
+| `user-delete-course-info` | Allows the user to delete a course information. |
+| `user-put-course-info` | Allows the user to update a course information. |
+| `user-post-course-lessons` | Allows the user to create a new course lessons. |
+| `user-get-course-lessons` | Allows the user to get a course lessons. |
+| `user-delete-course-lessons` | Allows the user to delete a course lessons. |
+| `user-put-course-lessons` | Allows the user to update a course lessons. |
+| `user-post-course-quiz` | Allows the user to create a new course quiz. |
+| `user-get-course-quiz` | Allows the user to get a course quiz. |
+| `user-delete-course-quiz` | Allows the user to delete a course quiz. |
+| `user-put-course-quiz` | Allows the user to update a course quiz. |
+| `user-post-course-task_performance` | Allows the user to create a new course task performance. |
+| `user-get-course-task_performance` | Allows the user to get a course task performance. |
+| `user-delete-course-task_performance` | Allows the user to delete a course task performance. |
+| `user-put-course-task_performance` | Allows the user to update a course task performance. |
 
 # Registration and Authorization Flow
 
