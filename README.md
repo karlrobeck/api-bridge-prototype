@@ -63,7 +63,7 @@ The api-bridge-prototype supports the following scopes:
 ### IMPORTANT NOTICE
 ### the registration url is only responsible for registering the client app. only the authorization server is only allowed to connect to this route
 
-The api-bridge-prototype uses the OAuth 2.0 protocol for registration and authorization. To register your client application, you need to send a POST request to the /register endpoint. The request body should contain the following information:
+The api-bridge-prototype uses the OAuth 2.0 protocol for registration and authorization. To register an client application, you need to send a POST request to the /register endpoint. The request body should contain the following information:
 ```javascript
 {
     name: "Your app name",
@@ -89,8 +89,25 @@ after the request is completed the response body will contain
 - `client_secret`: A secret key that will be used to sign requests.
 - `scope`: The scopes that your client application needs to access.
 
-Once your client application has been registered, you can request an access token by sending a POST request to the `/authorize` endpoint. The request body should contain the following information:
-
+Once your client application has been registered, you can request an access token by sending a POST request to the `/authorize` endpoint. The request should contain the following information:
+```javascript
+header={
+    "client-credentials":"base64 encoded client id and client secret"
+}
+```
+example header:
+```javascript 
+ 'Authorization ' + '(base64 encoded "client_id:client_secret")'
+```
+request body:
+```javascript
+{
+    response_type: "Must be json"
+    state:"random generated hex string"
+    scope:"The scopes your app needs to access"
+}  
+```
+The response body contain the following after being successful
 ```javascript
 {
     access_token: "The access token that you can use to communicate with the resource server."
@@ -157,7 +174,12 @@ else:
 ```
 The `gateway-password` header is used to authenticate the request. The `name`, `app_type`, `role`, and `scope` properties are used to register the app.
 
-Create another request to handle the authorization request. make a `POST` request to the `authorizationUrl` with the following headers:
+Create another request to handle the authorization request. make a `POST` request to the `authorizationUrl` with the following:
+
+headers:
+```javascript 
+"client-credentials": "your-client-credentials"
+```
 ```javascript
 const authorize = async () => {
   const response = await fetch(authorizationUrl, {
@@ -166,9 +188,9 @@ const authorize = async () => {
       "client-credentials": "your-client-credentials",
     },
     body: JSON.stringify({
-      client_id: "Your client ID",
-      client_secret: "Your client secret",
-      scope: "The scopes your app needs to access",
+      response_type:"Must be json",
+      state:"Random generated hex string",
+      scope:"The scopes your app needs to access",
     }),
 });
 ```
@@ -176,8 +198,8 @@ const authorize = async () => {
 response = requests.post(authorizationUrl, 
     headers={"client-credentials": "your-client-credentials"}, 
     json={
-    "client_id": "Your client ID",
-    "client_secret": "Your client secret",
+    "response_type": "Must be json",
+    "state": "random generated hex string",
     "scope": "The scopes your app needs to access",
 })
 ```
