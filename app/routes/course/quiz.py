@@ -10,21 +10,21 @@ course_quiz_router:APIRouter = APIRouter(
     '/',
     status_code=status.HTTP_200_OK
 )
-def getQuiz():
+def getQuiz() -> CourseQuiz:
     return CourseQuiz()
 
 @course_quiz_router.post(
     '/',
     status_code=status.HTTP_201_CREATED
 )
-def postQuiz():
+def postQuiz() -> CourseQuiz:
     return CourseQuiz()
 
 @course_quiz_router.put(
     '/',
     status_code=status.HTTP_205_RESET_CONTENT
 )
-def putQuiz():
+def putQuiz() -> CourseQuiz:
     return CourseQuiz()
 
 @course_quiz_router.delete(

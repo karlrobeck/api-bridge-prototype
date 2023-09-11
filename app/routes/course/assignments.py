@@ -10,21 +10,21 @@ course_assignments_router:APIRouter = APIRouter(
     '/',
     status_code=status.HTTP_200_OK
 )
-def getAssignments():
+def getAssignments() -> CourseAssignments:
     return CourseAssignments()
 
 @course_assignments_router.post(
     '/',
     status_code=status.HTTP_201_CREATED
 )
-def postAssignments():
+def postAssignments() -> CourseAssignments:
     return CourseAssignments()
 
 @course_assignments_router.put(
     '/',
     status_code=status.HTTP_205_RESET_CONTENT
 )
-def putAssignments():
+def putAssignments() -> CourseAssignments:
     return CourseAssignments()
 
 @course_assignments_router.delete(

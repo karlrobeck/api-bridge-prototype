@@ -10,21 +10,21 @@ course_info_router:APIRouter = APIRouter(
     '/',
     status_code=status.HTTP_200_OK
 )
-def getInfo():
+def getInfo() -> CourseInfo:
     return CourseInfo()
 
 @course_info_router.post(
     '/',
     status_code=status.HTTP_201_CREATED
 )
-def postInfo():
+def postInfo() -> CourseInfo:
     return CourseInfo()
 
 @course_info_router.put(
     '/',
     status_code=status.HTTP_205_RESET_CONTENT
 )
-def putInfo():
+def putInfo() -> CourseInfo:
     return CourseInfo()
 
 @course_info_router.delete(

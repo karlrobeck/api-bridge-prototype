@@ -10,21 +10,21 @@ course_task_performance_router:APIRouter = APIRouter(
     '/',
     status_code=status.HTTP_200_OK
 )
-def getTaskPerformance():
+def getTaskPerformance() -> CourseTaskPerformance:
     return CourseTaskPerformance()
 
 @course_task_performance_router.post(
     '/',
     status_code=status.HTTP_201_CREATED
 )
-def postTaskPerformance():
+def postTaskPerformance() -> CourseTaskPerformance:
     return CourseTaskPerformance()
 
 @course_task_performance_router.put(
     '/',
     status_code=status.HTTP_205_RESET_CONTENT
 )
-def putTaskPerformance():
+def putTaskPerformance() -> CourseTaskPerformance:
     return CourseTaskPerformance()
 
 @course_task_performance_router.delete(
