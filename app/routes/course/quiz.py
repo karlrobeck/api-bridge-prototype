@@ -1,32 +1,35 @@
 from typing import Annotated
-from fastapi import APIRouter,status,Header
+from fastapi import APIRouter,status
+from .schemas import CourseQuiz
 
-quiz_router:APIRouter = APIRouter()
+course_quiz_router:APIRouter = APIRouter(
+    prefix='/quiz'
+)
 
-@quiz_router.get('/quiz',status_code=status.HTTP_200_OK)
+@course_quiz_router.get(
+    '/',
+    status_code=status.HTTP_200_OK
+)
 def getQuiz():
+    return CourseQuiz()
 
-    
-
-    return 
-
-@quiz_router.post('/quiz',status_code=status.HTTP_201_CREATED)
+@course_quiz_router.post(
+    '/',
+    status_code=status.HTTP_201_CREATED
+)
 def postQuiz():
+    return CourseQuiz()
 
-    
-
-    return 
-
-@quiz_router.put('/quiz',status_code=status.HTTP_205_RESET_CONTENT)
+@course_quiz_router.put(
+    '/',
+    status_code=status.HTTP_205_RESET_CONTENT
+)
 def putQuiz():
+    return CourseQuiz()
 
-    
-
-    return 
-
-@quiz_router.delete('/quiz',status_code=status.HTTP_204_NO_CONTENT)
+@course_quiz_router.delete(
+    '/',
+    status_code=status.HTTP_204_NO_CONTENT
+)
 def deleteQuiz():
-
-    
-
-    return 
+    return CourseQuiz()

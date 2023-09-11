@@ -1,32 +1,35 @@
 from typing import Annotated
-from fastapi import APIRouter,status,Header
+from fastapi import APIRouter,status
+from .schemas import CourseAssignments
 
-assignment_router:APIRouter = APIRouter()
+course_assignments_router:APIRouter = APIRouter(
+    prefix='/assignments'
+)
 
-@assignment_router.get('/assignment',status_code=status.HTTP_200_OK)
-def getAssignment():
+@course_assignments_router.get(
+    '/',
+    status_code=status.HTTP_200_OK
+)
+def getAssignments():
+    return CourseAssignments()
 
-    
+@course_assignments_router.post(
+    '/',
+    status_code=status.HTTP_201_CREATED
+)
+def postAssignments():
+    return CourseAssignments()
 
-    return 
+@course_assignments_router.put(
+    '/',
+    status_code=status.HTTP_205_RESET_CONTENT
+)
+def putAssignments():
+    return CourseAssignments()
 
-@assignment_router.post('/assignment',status_code=status.HTTP_201_CREATED)
-def postAssignment():
-
-    
-
-    return 
-
-@assignment_router.put('/assignment',status_code=status.HTTP_205_RESET_CONTENT)
-def putAssignment():
-
-    
-
-    return 
-
-@assignment_router.delete('/assignment',status_code=status.HTTP_204_NO_CONTENT)
-def deleteAssignment():
-
-    
-
-    return 
+@course_assignments_router.delete(
+    '/',
+    status_code=status.HTTP_204_NO_CONTENT
+)
+def deleteAssignments():
+    return CourseAssignments()

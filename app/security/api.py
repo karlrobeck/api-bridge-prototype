@@ -4,7 +4,10 @@ from os import getenv
 from .auth import create_token,decode_token,encode_b64,decode_b64,verify_hash,get_hash
 from .types import AuthorizeBody,ClientInfo,ClientSecret,Credentials,AuthorizationData
 
-router:APIRouter = APIRouter(prefix=f"/{getenv('API_VERSION')}/security")    
+router:APIRouter = APIRouter(
+    prefix=f"/{getenv('API_VERSION')}/security",
+    tags=['security']
+)    
 
 @router.post('/authorize',status_code=status.HTTP_200_OK)
 async def authorizeToken(req:AuthorizeBody,client_credentials:str=Header()):
@@ -87,7 +90,7 @@ async def authorizeToken(req:AuthorizeBody,client_credentials:str=Header()):
             "refresh_hash":get_hash(getenv('REFRESH_TOKEN_KEYWORD'))
         }),
         scope=req.scope,
-        token_type="bearer"
+        token_type="bearer",
     )
 
 @router.post('/register',status_code=status.HTTP_201_CREATED)

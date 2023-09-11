@@ -1,22 +1,35 @@
+from typing import Annotated
 from fastapi import APIRouter,status
+from .schemas import CourseActivity
 
-activity_router:APIRouter = APIRouter()
+course_activity_router:APIRouter = APIRouter(
+    prefix='/activity'
+)
 
-@activity_router.get('/activity',status_code=status.HTTP_200_OK)
+@course_activity_router.get(
+    '/',
+    status_code=status.HTTP_200_OK
+)
 def getActivity():
-    return 
+    return CourseActivity()
 
-@activity_router.post('/activity',status_code=status.HTTP_201_CREATED)
+@course_activity_router.post(
+    '/',
+    status_code=status.HTTP_201_CREATED
+)
 def postActivity():
+    return CourseActivity()
 
-    return 
-
-@activity_router.put('/activity',status_code=status.HTTP_205_RESET_CONTENT)
+@course_activity_router.put(
+    '/',
+    status_code=status.HTTP_205_RESET_CONTENT
+)
 def putActivity():
+    return CourseActivity()
 
-    return 
-
-@activity_router.delete('/activity',status_code=status.HTTP_204_NO_CONTENT)
+@course_activity_router.delete(
+    '/',
+    status_code=status.HTTP_204_NO_CONTENT
+)
 def deleteActivity():
-
-    return 
+    return CourseActivity()

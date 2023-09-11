@@ -1,32 +1,35 @@
 from typing import Annotated
-from fastapi import APIRouter,status,Header
+from fastapi import APIRouter,status
+from .schemas import CourseTaskPerformance
 
-task_performance_router:APIRouter = APIRouter()
+course_task_performance_router:APIRouter = APIRouter(
+    prefix='/task_performance'
+)
 
-@task_performance_router.get('/task_performance',status_code=status.HTTP_200_OK)
+@course_task_performance_router.get(
+    '/',
+    status_code=status.HTTP_200_OK
+)
 def getTaskPerformance():
+    return CourseTaskPerformance()
 
-    
-
-    return 
-
-@task_performance_router.post('/task_performance',status_code=status.HTTP_201_CREATED)
+@course_task_performance_router.post(
+    '/',
+    status_code=status.HTTP_201_CREATED
+)
 def postTaskPerformance():
+    return CourseTaskPerformance()
 
-    
-
-    return 
-
-@task_performance_router.put('/task_performance',status_code=status.HTTP_205_RESET_CONTENT)
+@course_task_performance_router.put(
+    '/',
+    status_code=status.HTTP_205_RESET_CONTENT
+)
 def putTaskPerformance():
+    return CourseTaskPerformance()
 
-    
-
-    return 
-
-@task_performance_router.delete('/task_performance',status_code=status.HTTP_204_NO_CONTENT)
+@course_task_performance_router.delete(
+    '/',
+    status_code=status.HTTP_204_NO_CONTENT
+)
 def deleteTaskPerformance():
-
-    
-
-    return 
+    return CourseTaskPerformance()

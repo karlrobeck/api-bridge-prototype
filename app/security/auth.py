@@ -145,6 +145,24 @@ def verify_signature(token:str) -> bool | HTTPException:
     
     return True
 
+def verify_access_token(request:Request,access_token:Annotated[str,Header()]) -> bool | HTTPException:
+    
+    #verify token signature
+    verify_signature(access_token)
+
+    #verify user scope
+    decoded_token = decode_token(access_token)
+    user_scopes = decoded_token['scope']
+    scope_permission = f'user-{request.method.lower()}-{str(request.url.path.split("/")[-2]).lower()}-{str(request.url.path.split("/")[-1]).lower()}'
+
+    if scope_permission not in user_scopes.split(' '):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Unauthorized Request"
+        )
+    
+    return True
+
 def verify_request(request:Request):
 
     #verify token signature
