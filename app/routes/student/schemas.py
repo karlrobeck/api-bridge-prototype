@@ -21,7 +21,7 @@ class StudentGrades(BaseModel):
 
 class StudentSchedule(BaseModel):
     title:str=""
-    contents:str= [
+    contents:list[dict]= [
         {'subject':'','time':''}
     ]
 

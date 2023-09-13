@@ -2,7 +2,7 @@ from typing import Annotated
 from fastapi import APIRouter,status, Header,HTTPException
 from os import getenv
 from .auth import create_token,decode_token,encode_b64,decode_b64,verify_hash,get_hash
-from .types import AuthorizeBody,ClientInfo,ClientSecret,Credentials,AuthorizationData
+from .schemas import AuthorizeBody,ClientInfo,ClientSecret,Credentials,AuthorizationData
 
 router:APIRouter = APIRouter(
     prefix=f"/{getenv('API_VERSION')}/security",
