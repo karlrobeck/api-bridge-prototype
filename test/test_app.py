@@ -4,7 +4,7 @@ from app.security.schemas import ClientInfo,Credentials,AuthorizeBody,Authorizat
 from fastapi.testclient import TestClient
 from fastapi import status
 
-absolute_path = '\\'.join(os.path.dirname(__file__).split('\\')[:-1])
+absolute_path = '/'.join(os.path.dirname(__file__).split('/')[:-1])
 
 client = TestClient(app)
 
@@ -36,7 +36,7 @@ def test_routes():
 
     methods = ['post','get','put','delete']
 
-    routes = [x for x in os.listdir(os.path.join(absolute_path,'app\\routes')) if x not in ['api.py','__init__.py','__pycache__']]
+    routes = [x for x in os.listdir(os.path.join(absolute_path,'app/routes')) if x not in ['api.py','__init__.py','__pycache__']]
 
     scopes = []
     route_endpoints = []
