@@ -41,7 +41,7 @@ def test_routes():
     scopes = []
     route_endpoints = []
     for r in routes:
-        endpoints = [os.path.splitext(x)[0] for x in os.listdir(os.path.join(absolute_path,f'app\\routes\\{r}')) if x not in ['api.py','__init__.py','__pycache__','schemas.py']]
+        endpoints = [os.path.splitext(x)[0] for x in os.listdir(os.path.join(absolute_path,f'app/routes/{r}')) if x not in ['api.py','__init__.py','__pycache__','schemas.py']]
         for e in endpoints:
             for m in methods:
                 scopes.append(f'user-{m}-{r}-{e}')
