@@ -153,7 +153,7 @@ def verify_access_token(request:Request,access_token:Annotated[str,Header()]) ->
     #verify user scope
     decoded_token = decode_token(access_token)
     user_scopes = decoded_token['scope']
-    scope_permission = f'user-{request.method.lower()}-{str(request.url.path.split("/")[-2]).lower()}-{str(request.url.path.split("/")[-1]).lower()}'
+    scope_permission = f'user-{request.method.lower()}-{str(request.url.path.split("/")[-3]).lower()}-{str(request.url.path.split("/")[-2]).lower()}'
 
     if scope_permission not in user_scopes.split(' '):
         raise HTTPException(

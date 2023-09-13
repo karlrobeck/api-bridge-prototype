@@ -1,6 +1,5 @@
 from pydantic import BaseModel
 
-
 class AuthorizeBody(BaseModel):
     """
     Body of the authorization request.
