@@ -7,7 +7,7 @@ class StudentBalance(BaseModel):
         'prelim':0.0,
         'midterm':0.0,
         'prefinal':0.0,
-        'final':0.0,
+        'finals':0.0,
     }
 
 class StudentGrades(BaseModel):

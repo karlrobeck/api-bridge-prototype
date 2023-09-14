@@ -1,5 +1,6 @@
 from typing import Annotated
 from fastapi import FastAPI,HTTPException, status,Request
+from fastapi.staticfiles import StaticFiles
 from .security import api as security
 from .security.auth import verify_signature
 from .routes import api as routes

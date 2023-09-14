@@ -1,133 +1,95 @@
 from typing import Annotated
-from fastapi import APIRouter,status, Header,HTTPException
+from fastapi import APIRouter,HTTPException,status
 from os import getenv
-from .auth import create_token,decode_token,encode_b64,decode_b64,verify_hash,get_hash
-from .schemas import AuthorizeBody,ClientInfo,ClientSecret,Credentials,AuthorizationData
+from .auth import create_token,decode_token,Header,get_hash,verify_hash,decode_b64,encode_b64
+from .schemas import AuthAppRequestCredentials,AuthAppResponseCredentials,AuthCodeResponse,AuthRequestCode,AuthRequestCodePKCE,AuthTokenRequest,AuthTokenResponse
 
 router:APIRouter = APIRouter(
-    prefix=f"/{getenv('API_VERSION')}/security",
-    tags=['security']
-)    
+    prefix='/v1/security',
+    tags=['security'],
+)
 
-@router.post('/authorize',status_code=status.HTTP_200_OK)
-async def authorizeToken(req:AuthorizeBody,client_credentials:str=Header()):
-    """
-    Authorizes a client with the given client credentials.
+@router.post('/authorize')
+def AuthorizeUser(user_req:AuthRequestCode) -> AuthCodeResponse:
 
-    Args:
-        req: The request body.
-        client_credentials: The client credentials header.
-
-    Returns:
-        The authorization data.
-
-    Raises:
-        HTTPException: If the request is invalid.
-    """
-
-    if req.response_type != 'json':
-        raise HTTPException(
-            status_code=status.HTTP_405_METHOD_NOT_ALLOWED,
-            detail="response_type must be equal to json"
-        )
-
-    # Decode the client header.
+    # check if client id is correct format and in database
     try:
-        decoded_header = decode_b64(client_credentials)
+        client_id = decode_token(user_req.client_id)
     except:
         raise HTTPException(
             status_code=status.HTTP_406_NOT_ACCEPTABLE,
-            detail="Invalid Authorization Header"
-        )
-
-    if len(decoded_header.split(' ')) != 2:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid client credentials format"
-        )
-
-    # Check if the client credentials are in the correct format.
-    if decoded_header.split(' ')[0] != 'Authorization':
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid client credential format"
-        )
-
-    # Get the client header.
-    client_header = decoded_header.split(' ')[1].split(':')
-
-    # Decode the client_id.
-    decoded_client_id = decode_token(client_header[0])
-    
-    # Decode the client_id.
-    decoded_client_secret = decode_token(client_header[1])
-
-    # Check if the client_id and client_secret belong to each other.
-    if decoded_client_id['name'] != decoded_client_secret['name']:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="client id and client secret not match"
+            detail='invalid client id'
         )
     
-    # Verify if the client secret is signed by the system.
-    if not verify_hash(getenv('HASH_PASSWORD'),decoded_client_secret['signature']):
+    if user_req.response_type != 'code':
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Unautorized Request"
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
+            detail='response type must be code'
         )
 
-    # Return a new access token.
-    return AuthorizationData(
-        access_token=create_token({
-            "client_id":decoded_client_id,
-            "client_secret":decoded_client_secret,
-            "scope":req.scope
-        },expires_delta=True),
-        refresh_token=create_token({
-            "client_id":decoded_client_id,
-            "client_secret":decoded_client_secret,
-            "scope":req.scope,
-            "refresh_hash":get_hash(getenv('REFRESH_TOKEN_KEYWORD'))
-        }),
-        scope=req.scope,
-        token_type="bearer",
+    if user_req.redirect_uri == '':
+        raise HTTPException(
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
+            detail='invalid redirect_uri'
+        )
+    code = create_token(user_req.model_dump())
+
+    return AuthCodeResponse(
+        code=code,
+        state=user_req.state
     )
 
-@router.post('/register',status_code=status.HTTP_201_CREATED)
-async def register(request:ClientInfo,gateway_password:Annotated[str,Header()]):
-    """
-    Registers a new client.
+@router.post('/token')
+def AuthorizeToken(user_req:AuthTokenRequest,encoded_data:Annotated[str,Header()]) -> AuthTokenResponse:
 
-    Args:
-        request: The client information.
-        gateway_password: The gateway password.
+    grant_types = ['authorization_code']
 
-    Returns:
-        The credentials for the new client.
+    decoded_code = AuthRequestCode(**decode_token(user_req.code))
 
-    Raises:
-        HTTPException: If the request is invalid or the gateway password is incorrect.
-    """
-
-    if getenv('GATEWAY_SECRET_KEY') != gateway_password:
+    if decode_b64(encoded_data).split(' ')[0] != 'Basic':
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Unautorized Request"
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
+            detail='invalid encoded_data format'
         )
     
-    # Create a client ID and client secret.
-    client_id = create_token(request.model_dump())
-    client_secret = create_token(ClientSecret(
-        name=request.name,
-        signature=get_hash(getenv('HASH_PASSWORD'))
-    ).model_dump())
+    client_id,client_secret = decode_b64(encoded_data).split(' ')[1].split(':')
 
-    # Return the credentials for the new client.
-    return Credentials(
-        client_id=client_id,
-        client_secret=client_secret,
-        client_credentials=encode_b64(f'Authorization {client_id}:{client_secret}'),
-        scopes=request.scope
-    )
+    if user_req.grant_type not in grant_types:
+        raise HTTPException(
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
+            detail='invalid grant_type'
+        )
     
+    print(user_req.redirect_uri,decoded_code)
 
+    if user_req.redirect_uri != decoded_code.redirect_uri:
+        raise HTTPException(
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
+            detail='redirect uri doesnt match'
+        )
+
+    return AuthTokenResponse(
+        access_token=create_token({'client_id':client_id,'client_secret':client_secret},True),
+        token_type='bearer',
+        scope=decoded_code.scope,
+        expires_in=1111,
+        refresh_token='test'
+    )
+
+@router.post('/app/register')
+def AuthAppRegister(user_req:AuthAppRequestCredentials) -> AuthAppResponseCredentials:
+    
+    #register the app to database if not exist
+
+    app_client_id:str = create_token(user_req.model_dump())
+
+    app_client_secret:str = create_token({
+        **user_req.model_dump(),
+        'signature':get_hash(getenv('HASH_PASSWORD'))
+    })
+    
+    return AuthAppResponseCredentials(
+        client_id=app_client_id,
+        client_secret=app_client_secret,
+        client_credentials=encode_b64(f'Basic {app_client_id}:{app_client_secret}')
+    )
