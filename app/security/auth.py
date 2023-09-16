@@ -128,14 +128,17 @@ def verify_signature(token:str) -> bool | HTTPException:
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Unauthorized Request"
         )
+
+    client_id = decode_token(decoded_token['client_id'])
+    client_secret = decode_token(decoded_token['client_secret'])
     
-    if decoded_token['client_id']['name'] != decoded_token['client_secret']['name']:
+    if client_id['name'] != client_secret['name']:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Unauthorized Request"
         )
     
-    signature = decoded_token['client_secret']['signature']
+    signature = client_secret['signature']
 
     if not verify_hash(getenv('HASH_PASSWORD'),signature):
         raise HTTPException(
@@ -152,7 +155,9 @@ def verify_access_token(request:Request,access_token:Annotated[str,Header()]) ->
 
     #verify user scope
     decoded_token = decode_token(access_token)
-    user_scopes = decoded_token['scope']
+    client_id = decode_token(decoded_token['client_id'])
+    print(client_id)
+    user_scopes = client_id['scope']
     scope_permission = f'user-{request.method.lower()}-{str(request.url.path.split("/")[-3]).lower()}-{str(request.url.path.split("/")[-2]).lower()}'
 
     if scope_permission not in user_scopes.split(' '):
@@ -178,3 +183,12 @@ def verify_request(request:Request):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Unauthorized Request"
         )
+    
+def verify_admin(gateway_password:str = Header()) -> bool:
+
+    if gateway_password != getenv('GATEWAY_SECRET_KEY'):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED
+        )
+
+    return True

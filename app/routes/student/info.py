@@ -10,26 +10,26 @@ student_info_router:APIRouter = APIRouter(
     '/',
     status_code=status.HTTP_200_OK
 )
-def getInfo() -> StudentInfo:
+def getStudentInfo() -> StudentInfo:
     return StudentInfo()
 
 @student_info_router.post(
     '/',
     status_code=status.HTTP_201_CREATED
 )
-def postInfo() -> StudentInfo:
+def postStudentInfo() -> StudentInfo:
     return StudentInfo()
 
 @student_info_router.put(
     '/',
     status_code=status.HTTP_205_RESET_CONTENT
 )
-def putInfo() -> StudentInfo:
+def putStudentInfo() -> StudentInfo:
     return StudentInfo()
 
 @student_info_router.delete(
     '/',
     status_code=status.HTTP_204_NO_CONTENT
 )
-def deleteInfo():
+def deleteStudentInfo():
     return StudentInfo()

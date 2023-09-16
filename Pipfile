@@ -12,6 +12,7 @@ passlib = {extras = ["bcrypt"], version = "*"}
 pytest = "*"
 httpx = "*"
 jinja2 = "*"
+sqlalchemy = "*"
 
 [dev-packages]
 
